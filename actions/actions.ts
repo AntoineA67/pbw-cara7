@@ -9,7 +9,7 @@ export async function create() {
 	return await prisma.user.create({
 		data: {
 			email: 'efef@gmail.com',
-			name: 'efef',
+			name: 'ouwdwdi',
 		},
 	})
 }

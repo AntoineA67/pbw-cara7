@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@mui/material';
-import { create, getUsers } from '@/actions/actions';
+import { create } from '@/actions/actions';
 
 export function TestButton() {
 	return (
@@ -8,8 +8,7 @@ export function TestButton() {
 	);
 }
 
-export function TestButton2() {
-	const users = getUsers();
+export function TestButton2({ users }: { users: any }) {
 	return (
 		<>
 			{users}
