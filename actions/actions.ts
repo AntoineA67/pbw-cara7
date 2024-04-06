@@ -6,7 +6,7 @@ export async function getUsers() {
 }
 
 export async function create() {
-	prisma.user.create({
+	return await prisma.user.create({
 		data: {
 			email: 'efef@gmail.com',
 			name: 'efef',
