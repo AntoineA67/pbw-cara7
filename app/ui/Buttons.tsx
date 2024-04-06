@@ -11,6 +11,9 @@ export function TestButton() {
 export function TestButton2() {
 	const users = getUsers();
 	return (
-		{ users }
+		<>
+
+			{users}
+		</>
 	)
 }
