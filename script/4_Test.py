@@ -18,7 +18,7 @@ from util.account import get_account
 # Get account info from seed and connect it
 load_dotenv()
 XRP_WALLET_SEED = os.getenv("XRP_WALLET_SEED")
-print(f"Wallet Seed: {XRP_WALLET_SEED}")
+# print(f"Wallet Seed: {XRP_WALLET_SEED}")
 wallet = get_account(XRP_WALLET_SEED)
 print(f"Wallet address: {wallet.classic_address}")
 

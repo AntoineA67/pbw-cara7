@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 import subprocess
+import streamlit as st
 
 def hash_and_rename_json_file(file_path):
     try:
@@ -25,7 +26,7 @@ def hash_and_rename_json_file(file_path):
         content_hash = hashlib.sha256(content_str_with_timestamp.encode()).hexdigest()
         
         # Définir le nouveau chemin du dossier pour 'hashed'
-        new_dir_path = os.path.join(f'db/{din_num}')
+        new_dir_path = os.path.join(f'script/db/{din_num}')
         # S'assurer que le dossier existe, le créer sinon
         os.makedirs(new_dir_path, exist_ok=True)
         
@@ -43,7 +44,7 @@ def hash_and_rename_json_file(file_path):
 
 def push_hash_to_smart_contract_and_wallet(content_hash, contract_address):
     try:
-        command = f"cd ../evm-interaction && npx truffle exec --network xrpl ./scripts/pushHash.js {contract_address} {content_hash}"
+        command = f"cd evm-interaction && npx truffle exec --network xrpl ./scripts/pushHash.js {contract_address} {content_hash}"
         print(command)
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
@@ -55,16 +56,19 @@ def push_hash_to_smart_contract_and_wallet(content_hash, contract_address):
     except Exception as e:
         print(f"Error during smart contract interaction: {e}")
 
-if __name__ == "__main__":
+def update_data():
     # Traitement de tous les fichiers JSON dans le dossier '../data/'
-    for file_path in glob.glob('../data/*.json'):
+    for file_path in glob.glob('data/*.json'):
         content_hash, din_num = hash_and_rename_json_file(file_path)
         if content_hash and din_num:            
             try:
-                with open(f'db/{din_num}/{din_num}.json', 'r') as file:
+                with open(f'script/db/{din_num}/{din_num}.json', 'r') as file:
                     details = json.load(file)
                 
                 smart_contract_address = details["SmartContractAddress"]
                 push_hash_to_smart_contract_and_wallet(content_hash, smart_contract_address)
             except Exception as e:
+                st.write(f"Erreur lors de la lecture des détails ou de l'interaction avec le smart contract : {e}")
                 print(f"Erreur lors de la lecture des détails ou de l'interaction avec le smart contract : {e}")
+                return False
+    return True

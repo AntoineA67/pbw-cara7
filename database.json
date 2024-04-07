@@ -1,0 +1,14 @@
+{
+    "list_user": [
+        {
+            "id": 1,
+            "name": "Nguyen Van A",
+            "email": ""
+        },
+        {
+            "id": 2,
+            "name": "Nguyen Van B",
+            "email": ""
+        }
+    ]
+}

@@ -2,94 +2,223 @@ import os
 import streamlit as st
 import json
 
-# Créer la tab Dashboard
-def render_dashboard(nfts):
-    st.title("Dashboard NFT pour Voitures")
-    st.write(f"{len(nfts)} NFTs trouvés pour votre adresse publique.")
-    with st.expander("Voir les détails"):
-        st.write("Détails des NFTs...", nfts)
+import yaml
+from config import credentials, admin_names, cookie_name, cookie_key, cookie_expiry_days, pre_authorized
+import streamlit_authenticator as stauth
+from script.Create import launch_creation
+from script.Securisation import check_data_integrity_for_all
+from script.Update import update_data 
 
-# Créer la tab DEX
+def handle_session_actions(authenticator: stauth.Authenticate):
+    """Handles session actions such as data refresh and logout."""
+    try:
+        # Keys related to authentication that should not be cleared on data refresh
+        exclude_auth_keys = ["authentication_status", "username", "logout", "init", "name", "logoutkey", "failed_login_attempts", "last_query", "results", "theme", "role", "size_window", "public_address"]
+        
+        # Create columns for the buttons and user status
+        col1, col2, col3, col4, col5 = st.columns(5)
+        
+        with col1:
+            if st.button('Refresh'):
+                for key in list(st.session_state.keys()):
+                    if key not in exclude_auth_keys:
+                        del st.session_state[key]
+        
+        with col3:
+            authenticator.logout(key="logoutkey")
+            
+        # Column 2: Logout button
+        with col4:
+            st.write("🔒", st.session_state.get("role"))
+        # Column 3: Display user status
+        with col5:
+            st.write(st.session_state.get("username", "Guest"), "🟢")
+    except Exception as e:
+        st.error(f"An error occurred in handle_session_actions(): {e}")
+
+def load_wallet_address_from_yaml():
+    with open(os.path.join("confs", "secrets.yaml"), 'r') as file:
+        keys_secrets = yaml.load(file, Loader=yaml.SafeLoader)
+    wallets_addresses = keys_secrets["wallet_address"]
+    current_username = st.session_state.get('username')
+    if current_username in wallets_addresses:
+        # Directly retrieve the wallet address for the username
+        wallet_address = wallets_addresses[current_username]
+        st.session_state["public_address"] = wallet_address
+        return wallet_address
+    return None
+
+# Fonction pour afficher le dashboard NFT
+def display_wallet(nfts):
+    add = load_wallet_address_from_yaml()
+    with st.expander("Public Address"):
+        st.write(add)
+    st.title("CARS NFT Dashboard")
+    with st.expander("See Car NFTs"):
+        st.write("Détails des NFTs...", nfts)
+    if st.button("Check the integrity of your NFTs"):
+        st.write("Checking the integrity of your NFTs...")
+        if check_data_integrity_for_all() == True:
+            st.success("All NFTs are OK. The raw data integrity is preserved.")
+        else:
+            st.error("Some NFTs are NOT OK. The raw data integrity is compromised.")
+
+def display_new_data():
+    st.title("Update with new data")
+    data_folder = "data"  # Chemin vers le dossier contenant les données JSON
+
+    # Vérifier si le dossier existe
+    if not os.path.exists(data_folder):
+        st.write("Le dossier de données n'existe pas.")
+        return
+
+    # Lister tous les fichiers JSON dans le dossier
+    json_files = [f for f in os.listdir(data_folder) if f.endswith('.json')]
+
+    if not json_files:
+        st.write("Aucune donnée trouvée.")
+        return
+
+    with st.expander("Data"):
+        # Parcourir chaque fichier JSON
+        for json_file in json_files:
+            file_path = os.path.join(data_folder, json_file)
+            
+            # Charger le contenu JSON
+            with open(file_path, 'r') as file:
+                data = json.load(file)
+            
+            # Afficher le nom du fichier et le contenu de manière organisée
+            st.write(f"**{json_file}**")  # Nom du fichier en gras
+            st.json(data)  # Afficher le contenu JSON de manière interactive
+
+            # Optionnel: insérer une séparation entre les fichiers
+            st.markdown("---")
+    if st.button("Update data"):
+        if update_data() == True:
+            st.success("Data updated successfully")
+        else:
+            st.error("Error updating data, please check the logs")
+
+# Fonction pour afficher la plateforme d'échange DEX
 def render_dex():
     st.title("Plateforme d'Échange DEX")
     st.write("Fonctionnalités d'échange à implémenter...")
 
+# Fonction pour s'assurer que le répertoire de l'utilisateur existe
 def ensure_user_directory(public_address):
-    """Assure que le répertoire utilisateur existe et crée un fichier vide si nécessaire."""
-    directory_path = f"script/db/"
-    file_path = f"{directory_path}/{public_address}.json"
+    directory_path = "script/db"
+    file_path = os.path.join(directory_path, f"{public_address}.json")
     
     if not os.path.exists(directory_path):
         os.makedirs(directory_path)
     
-    if not os.path.exists(file_path):
+    if not os.path.isfile(file_path):
         with open(file_path, "w") as file:
-            json.dump({"public_address": public_address, "list_smart_contracts_addresses": []}, file)
+            json.dump({"public_address": public_address, "list_NFTokenId": []}, file)
     
     return file_path
 
-def load_nft_data(public_address):
-    """Charge les données NFT pour un utilisateur donné."""
-    file_path = ensure_user_directory(public_address)
+def create_new_nft_data():
+    st.title("Add New Cars")
+    st.write("You have the possibility to add new cars to your wallet.")
+    if st.button("Add new car"):
+        if launch_creation() == True:
+            st.success("New cars added successfully")
+        else:
+            st.error("Error adding new cars, please check the logs")
+
+# Fonction pour charger les données NFT de l'utilisateur
+def load_nft_data():
+    file_path = ensure_user_directory(st.session_state["public_address"])
     with open(file_path, "r") as file:
         data = json.load(file)
     return data
 
-def append_smart_contract_address(public_address, new_smart_contract_address):
-    """Ajoute une nouvelle adresse de smart contract à l'utilisateur spécifié."""
-    file_path = ensure_user_directory(public_address)
+def display_securitization_platform_with_risk():
+    st.title("Vehicle Securitization Platform")
+
+    # Simulated data for demonstration
+    vehicles = [
+        {"model": "Tesla Model S", "year": "2022", "lease_price": "$1,200/month", "risk_level": "Low", "description": "Electric performance car with high autonomy."},
+        {"model": "BMW i8", "year": "2020", "lease_price": "$1,500/month", "risk_level": "Medium", "description": "Sporty hybrid with futuristic design."},
+        {"model": "Audi e-tron GT", "year": "2021", "lease_price": "$1,100/month", "risk_level": "Low", "description": "Comfort and performance in an elegant electric vehicle."},
+        {"model": "Mercedes EQC", "year": "2021", "lease_price": "$950/month", "risk_level": "Medium", "description": "Electric SUV combining luxury and technology."},
+        {"model": "Porsche Taycan", "year": "2022", "lease_price": "$1,300/month", "risk_level": "High", "description": "Performance and innovation in a sporty electric vehicle."},
+    ]
+
+    # User selects the risk level they are interested in
+    risk_selection = st.selectbox("Select risk level:", ["All", "Low", "Medium", "High"])
+
+    filtered_vehicles = vehicles if risk_selection == "All" else [vehicle for vehicle in vehicles if vehicle["risk_level"] == risk_selection]
+
+    # Display each vehicle in its own box based on risk level filter
+    for vehicle in filtered_vehicles:
+        with st.container():
+            cols = st.columns([2, 5, 2, 2, 6])  # Space distribution between columns
+            cols[0].image("https://via.placeholder.com/150", use_column_width=True)  # Placeholder for the image
+            cols[1].markdown(f"**Model:** {vehicle['model']}")
+            cols[2].markdown(f"**Year:** {vehicle['year']}")
+            cols[3].markdown(f"**Lease Price:** {vehicle['lease_price']}")
+            cols[4].markdown(f"**Risk Level:** {vehicle['risk_level']}\n\n**Description:** {vehicle['description']}")
+
+            # Add a line separator for clarity
+            st.markdown("---")
+
+    # Footer with a call to action
+    st.info("Interested in investing in our vehicle-backed securities? Contact us for more information.")
     
-    with open(file_path, "r+") as file:
-        data = json.load(file)
-        if new_smart_contract_address not in data["list_smart_contracts_addresses"]:
-            data["list_smart_contracts_addresses"].append(new_smart_contract_address)
-            file.seek(0)
-            json.dump(data, file, indent=4)
-            file.truncate()
-
-def create_wallet_collection():
-    """Demands the user's public address and handles new wallet creation."""
-    # Use a temporary state variable for the new wallet creation process
-    if 'create_wallet' not in st.session_state:
-        st.session_state.create_wallet = False
-
-    if st.session_state.create_wallet:
-        new_wallet_address = st.text_input("Entrez votre nouvelle adresse publique:", key="new_wallet_address")
-        if new_wallet_address:
-            st.session_state.public_address = new_wallet_address
-            ensure_user_directory(new_wallet_address)
-            st.success(f"Wallet créé avec succès! Votre nouvelle adresse est: {new_wallet_address}")
-            st.session_state.create_wallet = False  # Reset the wallet creation process
-    else:
-        public_address = st.text_input("Entrez votre adresse publique:", key="public_address")
-        if not public_address:
-            st.warning("Vous n'avez pas encore de wallet, veuillez en créer un pour continuer.")
-            if st.button("Créer un wallet"):
-                st.session_state.create_wallet = True
-                st.rerun()
-        else:
-            st.success("Wallet chargé avec succès!")
-
+# La fonction principale orchestrant l'application
 def main():
-    st.sidebar.write(st.session_state)
     st.sidebar.title("Navigation")
-    app_mode = st.sidebar.radio("Choisir la page:", ["Dashboard", "DEX"])
+    tabs = st.tabs(["Wallet", "DEX", "Update Data", "Add New Cars"])
     
-    public_address = st.session_state.get("public_address")
-    if "nfts" not in st.session_state:
-        st.session_state["nfts"] = None
-    
-    if public_address:
-        st.session_state["nfts"] = load_nft_data(public_address)
-    else:
-        create_wallet_collection()
-        public_address = st.session_state.get("public_address")
-        st.session_state["nfts"] = load_nft_data(public_address) if public_address else None
-    
-    if app_mode == "Dashboard" and st.session_state["nfts"]:
-        render_dashboard(st.session_state["nfts"])
-    elif app_mode == "DEX":
-        render_dex()
+    with tabs[0]:
+        nfts = load_nft_data()
+        display_wallet(nfts)
+    with tabs[1]:
+        display_securitization_platform_with_risk()
+    with tabs[2]:
+        display_new_data()
+    with tabs[3]:
+        create_new_nft_data()
+
+def auth():
+    # """Authenticates the user and runs the main function."""
+    # try: 
+        # Initialize the authenticator
+        authenticator = stauth.Authenticate(
+            credentials=credentials,
+            cookie_name=cookie_name,
+            cookie_key=cookie_key,
+            cookie_expiry_days=cookie_expiry_days
+        )
+
+        # Perform login
+        authenticator.login()
+        
+        if "public_address" not in st.session_state or st.session_state["public_address"] is None:
+            st.session_state["public_address"] = load_wallet_address_from_yaml()
+        cols = st.columns([1, 8, 1])
+        # Authentication status handling
+        if st.session_state.get("authentication_status"):
+            if admin_names and st.session_state.get("username") in admin_names:
+                st.session_state["role"] = "admin"
+            else:
+                st.session_state["role"] = "user"
+            with cols[1]:
+                handle_session_actions(authenticator)
+                main()
+        elif st.session_state.get("authentication_status") is False:
+            st.error('Username/password is incorrect')
+        elif st.session_state.get("authentication_status") is None:
+            st.warning('Please enter your username and password')
+    # except Exception as e:
+    #     st.error(f"An error occurred in auth(): {e}")
 
 if __name__ == "__main__":
-    main()
+    st.set_page_config(page_title="NFT Dashboard", page_icon="🚗", initial_sidebar_state="collapsed", layout="wide")
+    # Initialize session state variables
+    if "public_address" not in st.session_state:
+        st.session_state["public_address"] = None  # Or any other default value you prefer
+    auth()
