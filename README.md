@@ -37,4 +37,16 @@ Les NFT sont destinés à être associés à ces différents portefeuilles afin 
 
 ## Interface graphique :
 
-.image.
+WIP
+
+## Lancement du projet :
+
+Pour lancer le projet, exécutez la commande suivante :
+
+```
+make install
+```
+
+```
+make run
+```
