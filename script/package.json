@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "xrpl-client": "^2.4.0",
+    "xrpl-secret-numbers": "^0.3.4"
+  },
+  "name": "script",
+  "version": "1.0.0",
+  "main": "pleurer.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
