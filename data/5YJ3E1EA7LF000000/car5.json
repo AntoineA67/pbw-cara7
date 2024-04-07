@@ -1,0 +1,38 @@
+{
+    "vehicleId": "5YJ3E1EA7LF000000",
+    "brand": "BMW",
+    "model": "i3",
+    "year": 2018,
+    "totalKilometers": 22000,
+    "batteryHealth": 87,
+    "batteryHealthLastChecked": "2023-02-28",
+    "chargingNumber": 95,
+    "chargingMinutes": 38000,
+    "mileage": 13700,
+    "leaseDetails": {
+      "leaseStartDate": "2018-11-01",
+      "leaseEndDate": "2021-11-01",
+      "monthlyPayment": 310,
+      "paymentDueDate": "Every 1st of the month",
+      "paymentDefault": true,
+      "remainingPayments": 0,
+      "totalLeaseTerm": 36,
+      "mileageLimit": 45000,
+      "currentMileage": 13700,
+      "overageChargePerMile": 0.10,
+      "latePaymentMonths": 3
+    },
+    "insuranceDetails": {
+      "policyNumber": "INS321654",
+      "provider": "Liberty Mutual",
+      "coverageStartDate": "2018-11-01",
+      "coverageEndDate": "2021-11-01",
+      "coverageType": "Theft & Fire"
+    },
+    "registrationDetails": {
+      "registrationNumber": "5GH7890",
+      "state": "Nevada",
+      "expirationDate": "2021-11-01"
+    }
+  }
+  

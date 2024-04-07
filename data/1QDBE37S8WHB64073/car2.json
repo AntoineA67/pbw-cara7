@@ -1,0 +1,38 @@
+{
+    "vehicleId": "1QDBE37S8WHB64073",
+    "brand": "Tesla",
+    "model": "Model 3",
+    "year": 2022,
+    "totalKilometers": 36000,
+    "batteryHealth": 100,
+    "batteryHealthLastChecked": "2023-01-15",
+    "chargingNumber": 13,
+    "chargingMinutes": 3600,
+    "mileage": 15234,
+    "leaseDetails": {
+      "leaseStartDate": "2022-05-01",
+      "leaseEndDate": "2025-05-01",
+      "monthlyPayment": 499,
+      "paymentDueDate": "Every 1st of the month",
+      "paymentDefault": false,
+      "remainingPayments": 12,
+      "totalLeaseTerm": 36,
+      "mileageLimit": 36000,
+      "currentMileage": 15234,
+      "overageChargePerMile": 0.25,
+      "latePaymentMonths": 0
+    },
+    "insuranceDetails": {
+      "policyNumber": "POLICY123456",
+      "provider": "State Farm",
+      "coverageStartDate": "2022-05-01",
+      "coverageEndDate": "2023-05-01",
+      "coverageType": "Comprehensive"
+    },
+    "registrationDetails": {
+      "registrationNumber": "1AB2345",
+      "state": "California",
+      "expirationDate": "2023-05-01"
+    }
+  }
+  
