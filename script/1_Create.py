@@ -7,12 +7,9 @@ import re
 
 from util.tokens import mint_token
 from util.account import get_account
+from util.json import read_data_from_car_json
 
-VIN_FILE_PATH = "VIN.csv"
-
-df = pd.read_csv(VIN_FILE_PATH)
-
-vin_numbers = df["VIN"].tolist()
+vin_numbers = [ v['vehicleId'] for v in read_data_from_car_json("../data/").values() ]
 print(f"VIN Numbers: {vin_numbers}")
 
 # Get account info from seed and connect it
@@ -22,7 +19,7 @@ print(f"Wallet Seed: {XRP_WALLET_SEED}")
 wallet = get_account(XRP_WALLET_SEED)
 print(f"Wallet address: {wallet.classic_address}")
 
-def store_smart_contract_in_evm(data):
+def store_smart_contract_in_evm():
     # Define the command to be executed
     command = "cd ../evm-interaction && npx truffle migrate --network xrpl"
 
@@ -54,17 +51,9 @@ def store_smart_contract_in_evm(data):
 for vin in vin_numbers:
     print(f"Creating smart contract for VIN: {vin}")
 
-    # Create a dictionary with VIN and smart contract address
-    data = {"VIN": vin, "SmartContractAddress": smart_contract_address}
+    smart_contract_address = store_smart_contract_in_evm()
 
-    # TODO Store SmartContract in EVM
-
-    smart_contract_address = store_smart_contract_in_evm(data)
-
-    # Create a JSON file named after the VIN number and store the data
-    file_name = f"db/{vin}.json"
-    with open(file_name, "w") as json_file:
-        json.dump(data, json_file, indent=4)
+    # Mint NFT token
     results = mint_token(
         XRP_WALLET_SEED,
         smart_contract_address,
@@ -72,3 +61,11 @@ for vin in vin_numbers:
         0x13A, # Transfer fee
         0, # Taxon
     )
+    # print(f"Token ID: {results}")
+    data = {"VIN": vin, "SmartContractAddress": smart_contract_address, "NFTokenId": results["meta"]["nftoken_id"]}
+
+    # Create a folder and a JSON file named after the VIN number and store the data
+    os.makedirs(f"db/{vin}", exist_ok=True)
+    file_name = f"db/{vin}/{vin}.json"
+    with open(file_name, "w") as json_file:
+        json.dump(data, json_file, indent=4)
