@@ -15,7 +15,7 @@ Une meilleure information dans ce domaine favorisera une maturité accrue des le
 
 #### Création du NFT et smartcontract sur EVM
 
-Lorsque la voiture est vendue, [un jeton non fongible (NFT)](https://github.com/AntoineA67/pbw-cara7/blob/main/script/1_Create.py) est créé sur la blockchain XRP. Ce NFT contient [https://github.com/AntoineA67/pbw-cara7/blob/main/evm-interaction/contracts/HashStorage.sol](l'adresse d'un contrat intelligent situé sur l'EVM)  (Ethereum Virtual Machine), lequel conserve une collection de hachages de fichiers historiques représentant l'état passé de la voiture ainsi que sa santé financière.
+Lorsque la voiture est vendue, [un jeton non fongible (NFT)](https://github.com/AntoineA67/pbw-cara7/blob/main/script/1_Create.py) est créé sur la blockchain XRP. Ce NFT contient [l'adresse d'un contrat intelligent situé sur l'EVM](https://github.com/AntoineA67/pbw-cara7/blob/main/evm-interaction/contracts/HashStorage.sol)  (Ethereum Virtual Machine), lequel conserve une collection de hachages de fichiers historiques représentant l'état passé de la voiture ainsi que sa santé financière.
 
 [![](/img/2.png)](https://miro.com/app/board/uXjVKXynQg8=/?moveToViewport=-2594,1316,2684,1234&embedId=215828249926)
 
