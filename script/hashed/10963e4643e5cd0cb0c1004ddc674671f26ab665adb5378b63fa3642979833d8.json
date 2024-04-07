@@ -1,0 +1,37 @@
+{
+  "vehicleId": "5XYKT3A29CG194978",
+  "brand": "Chevrolet",
+  "model": "Bolt EV",
+  "year": 2020,
+  "totalKilometers": 12000,
+  "batteryHealth": 92,
+  "batteryHealthLastChecked": "2023-04-01",
+  "chargingNumber": 80,
+  "chargingMinutes": 72000,
+  "mileage": 7500,
+  "leaseDetails": {
+    "leaseStartDate": "2020-09-01",
+    "leaseEndDate": "2023-09-01",
+    "monthlyPayment": 350,
+    "paymentDueDate": "Every 1st of the month",
+    "paymentDefault": false,
+    "remainingPayments": 5,
+    "totalLeaseTerm": 36,
+    "mileageLimit": 30000,
+    "currentMileage": 7500,
+    "overageChargePerMile": 0.20,
+    "latePaymentMonths": 0
+  },
+  "insuranceDetails": {
+    "policyNumber": "INS789123",
+    "provider": "Allstate",
+    "coverageStartDate": "2020-09-01",
+    "coverageEndDate": "2023-09-01",
+    "coverageType": "Full Coverage"
+  },
+  "registrationDetails": {
+    "registrationNumber": "3CD4567",
+    "state": "Florida",
+    "expirationDate": "2023-09-01"
+  }
+}

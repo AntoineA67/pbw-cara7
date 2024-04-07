@@ -1,10 +1,6 @@
 import hashlib
 import json
 import os
-from web3 import Web3
-from xrpl.clients import JsonRpcClient
-from xrpl.models.transactions import Payment
-from xrpl.wallet import generate_faucet_wallet
 import subprocess
 
 
@@ -43,6 +39,7 @@ def hash_and_rename_json_file(file_path):
 def push_hash_to_smart_contract_and_wallet(content_hash, contract_address):
     try:
         command = f"cd ../evm-interaction && npx truffle exec --network xrpl ./scripts/pushHash.js {contract_address} {content_hash}"
+        print(command)
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
 
@@ -54,7 +51,7 @@ def push_hash_to_smart_contract_and_wallet(content_hash, contract_address):
         print(f"Error during smart contract interaction: {e}")
 
 if __name__ == "__main__":
-    file_path = '../data/car2.json'
+    file_path = '../data/car1.json'
     content_hash, din_num = hash_and_rename_json_file(file_path)
     if content_hash and din_num:
         print(f"Content hash: {content_hash} for {din_num}")
