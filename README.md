@@ -34,3 +34,7 @@ Les NFT sont destinés à être associés à ces différents portefeuilles afin 
 [![](/img/4.png)](https://miro.com/app/live-embed/uXjVKXynQg8=/?moveToViewport=-2387,3742,2624,1207&embedId=338572393257)
 
 [![](/img/5.png)](https://miro.com/app/live-embed/uXjVKXynQg8=/?moveToViewport=-2736,5242,4017,1847&embedId=56264919248)
+
+## Interface graphique :
+
+.image.
