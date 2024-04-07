@@ -69,3 +69,6 @@ for vin in vin_numbers:
     file_name = f"db/{vin}/{vin}.json"
     with open(file_name, "w") as json_file:
         json.dump(data, json_file, indent=4)
+    
+    
+    
