@@ -2,7 +2,7 @@
 
 Need to create `.env` at root of this project and add this :
 ```
-MNEMONIC="your mnemonic"
+EVM_XRP_MNEMONIC="your mnemonic"
 ```
 
 Create new smart contract
@@ -10,7 +10,7 @@ Create new smart contract
 >> parse "contract address:" for need smartcontract address
 
 Get all hash of specific smartcontract
-`truffle exec --network xrpl ./scripts/getHashList.js <smart_contract_address>`
+`npx truffle exec --network xrpl ./scripts/getHashList.js <smart_contract_address>`
 
 Push hash on specific smartcontract
-`truffle exec ./pushHash.js <smart_contract_address> <hash>`
+`truffle exec --network xrpl ./scripts/pushHash.js <smart_contract_address> <hash>`

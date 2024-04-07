@@ -2,7 +2,7 @@ require('dotenv').config();
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 const infuraProjectId = process.env.INFURA_PROJECT_ID;
 const etherscanApi = process.env.ETHERSCAN_API;
-const mnemonic = process.env.MNEMONIC;
+const mnemonic = process.env.EVM_XRP_MNEMONIC;
 
 module.exports = {
 
