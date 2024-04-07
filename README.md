@@ -15,13 +15,13 @@ Une meilleure information dans ce domaine favorisera une maturité accrue des le
 
 #### Création du NFT et smartcontract sur EVM
 
-Lorsque la voiture est vendue, [un jeton non fongible (NFT)](https://github.com/AntoineA67/pbw-cara7/blob/main/script/1_Create.py) est créé sur la blockchain XRP. Ce NFT contient l'[https://github.com/AntoineA67/pbw-cara7/blob/main/evm-interaction/contracts/HashStorage.sol](adresse d'un contrat intelligent situé sur l'EVM) (Ethereum Virtual Machine), lequel conserve une collection de hachages de fichiers historiques représentant l'état passé de la voiture ainsi que sa santé financière.
+Lorsque la voiture est vendue, [un jeton non fongible (NFT)](https://github.com/AntoineA67/pbw-cara7/blob/main/script/1_Create.py) est créé sur la blockchain XRP. Ce NFT contient [https://github.com/AntoineA67/pbw-cara7/blob/main/evm-interaction/contracts/HashStorage.sol](l'adresse d'un contrat intelligent situé sur l'EVM)  (Ethereum Virtual Machine), lequel conserve une collection de hachages de fichiers historiques représentant l'état passé de la voiture ainsi que sa santé financière.
 
 [![](/img/2.png)](https://miro.com/app/board/uXjVKXynQg8=/?moveToViewport=-2594,1316,2684,1234&embedId=215828249926)
 
 #### Mise à jour des informations techniques et financière
 
-Périodiquement, les données techniques et financières sont transmises à une [agrégation de données](https://github.com/AntoineA67/pbw-cara7/blob/main/script/2_Update.py), puis elles sont enregistrées dans un [fichier JSON](https://github.com/AntoineA67/pbw-cara7/blob/main/script/hashed/0190016f3f3134f181c7006c478bfcb706448a6ead3cb227f400fcd17ac6256a.json). Ensuite, un hachage de ce fichier est généré et stocké dans un contrat intelligent sur l'EVM (Ethereum Virtual Machine) d'XRP. Ce contrat intelligent permet de récupérer tous les hachages qui y ont été ajoutés et d'ajouter de nouveaux hachages, sans possibilité de modifier les hachages déjà existants.
+Périodiquement, les données techniques et financières sont transmises à une [agrégation de données](https://github.com/AntoineA67/pbw-cara7/blob/main/script/2_Update.py), puis elles sont enregistrées dans un fichier JSON. Ensuite, un hachage de ce fichier est généré et stocké dans un contrat intelligent sur l'EVM (Ethereum Virtual Machine) d'XRP. Ce contrat intelligent permet de récupérer tous les hachages qui y ont été ajoutés et d'ajouter de nouveaux hachages, sans possibilité de modifier les hachages déjà existants.
 
 [![](/img/3.png)](https://miro.com/app/live-embed/uXjVKXynQg8=/?moveToViewport=-2250,2617,2189,1006&embedId=328669422631)
 
