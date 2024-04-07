@@ -35,9 +35,23 @@ Les NFT sont destinés à être associés à ces différents portefeuilles afin 
 
 [![](/img/5.png)](https://miro.com/app/live-embed/uXjVKXynQg8=/?moveToViewport=-2736,5242,4017,1847&embedId=56264919248)
 
-## Interface graphique :
+## Configuration du projet :
 
-WIP
+
+Éditez le fichier suivant `\evm-interaction\.env` :
+
+```
+EVM_XRP_MNEMONIC="your mnemonic"
+```
+
+Éditez le fichier suivant `\scripts\.env` :
+
+```
+XRP_WALLET_SEED="your xrp seed"
+```
+
+Éditez le fichier suivant `\confs\secrets.yaml` 
+
 
 ## Lancement du projet :
 
