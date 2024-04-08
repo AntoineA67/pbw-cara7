@@ -80,7 +80,7 @@ make run
 
 </details>
 
-<details open>
+<details>
   <summary><strong>English</strong></summary>
 
 As part of the Paris Blockchain Week, we have designed a proof of concept (PoC) for a securitization service leveraging the XRP blockchain.
